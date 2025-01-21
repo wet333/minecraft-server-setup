@@ -10,7 +10,7 @@ services:
       - "24454:24454/udp"
     environment:
       EULA: "TRUE"
-      MOTD: "Coolify awet333 Minecraft Server"
+      MOTD: "§6Welcome to Wet333's Server! §dSurvival §6\"§c§lLaOrden§6 gang!\""
       ICON: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ_VJWUjCVt1q53Y27_4rpcVwIQDf4TxmLAOg&s"
       OVERRIDE_ICON: "true"
       DIFFICULTY: "hard"
