@@ -1,0 +1,302 @@
+@import "tailwindcss";
+
+/* ---------- Tokens (see DESIGN.md) ---------- */
+
+:root {
+  color-scheme: dark;
+  /*
+   * Dark only. Deepslate neutrals (OKLCH hue 255) and copper, generated from one role table.
+   * Elevation: page (bg) < card (surface); buttons (btn) sit on the card, fields (raised) and slots sink into it.
+   */
+  --bg: #0d1116;
+  --surface: #151a1f;
+  --raised: #101419;
+  --hover: #242930;
+  --btn: #1f2329;
+  --btn-border: #3d434a;
+  --btn-shade: rgb(0 0 0 / 0.35);
+  --slot: #070a0f;
+  --line: #31363d;
+  --field: #7a818a;
+  --ink: #ebeff4;
+  --muted: #bdc3ca;
+  --faint: #a0a5ac;
+  /* Bright copper takes a dark label: white on orange this light would fail contrast. */
+  --copper: #fc9450;
+  --on-copper: #1d0f07;
+  --copper-ink: #f2ad73;
+  --copper-line: #d87d4c;
+  --focus: #f7945a;
+  --teal: #77d4cc;
+  --emerald: #86d797;
+  --gold: #f2bd68;
+  --redstone: #fea196;
+  /* Subtle backgrounds for selected rows, notices and badges (never the colour with alpha). */
+  --copper-soft: #2c1d12;
+  --teal-soft: #062a28;
+  --emerald-soft: #122a18;
+  --gold-soft: #32230a;
+  --redstone-soft: #3b1c19;
+
+  /* Signal colours for tiny badges with a dark glyph. */
+  --sig-teal: #5cc5b4;
+  --sig-emerald: #5ad68e;
+  --sig-gold: #f2c24b;
+  --sig-redstone: #ff7a73;
+  --sig-copper: #e8844e;
+  --sig-glyph: #111317;
+
+  --chrome: #0d1116;
+  --bevel-light: rgb(255 255 255 / 0.07);
+  --bevel-dark: rgb(0 0 0 / 0.55);
+  --tooltip: #0b0c10;
+  --glow: rgb(232 132 78 / 0.07);
+  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.6'/%3E%3C/svg%3E");
+
+  --display-family: "Oxanium Variable", "Atkinson Hyperlegible Next Variable", system-ui, sans-serif;
+  --header-h: 148px;
+  /* Bottom dock: 44px controls + padding + 2px border. */
+  --dock-h: 66px;
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --header-h: 76px;
+  }
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-raised: var(--raised);
+  --color-hover: var(--hover);
+  --color-btn-border: var(--btn-border);
+  --color-chrome: var(--chrome);
+  --color-line: var(--line);
+  --color-field: var(--field);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-faint: var(--faint);
+  --color-copper: var(--copper);
+  --color-on-copper: var(--on-copper);
+  --color-copper-ink: var(--copper-ink);
+  --color-copper-line: var(--copper-line);
+  --color-copper-soft: var(--copper-soft);
+  --color-teal-soft: var(--teal-soft);
+  --color-emerald-soft: var(--emerald-soft);
+  --color-gold-soft: var(--gold-soft);
+  --color-redstone-soft: var(--redstone-soft);
+  --color-teal: var(--teal);
+  --color-emerald: var(--emerald);
+  --color-gold: var(--gold);
+  --color-redstone: var(--redstone);
+  --color-slot: var(--slot);
+  --color-tooltip: var(--tooltip);
+  --color-sig-teal: var(--sig-teal);
+  --color-sig-emerald: var(--sig-emerald);
+  --color-sig-gold: var(--sig-gold);
+  --color-sig-redstone: var(--sig-redstone);
+  --color-sig-copper: var(--sig-copper);
+  --color-sig-glyph: var(--sig-glyph);
+
+  --font-sans: "Atkinson Hyperlegible Next Variable", system-ui, sans-serif;
+  --font-display: var(--display-family);
+  --font-mono: "JetBrains Mono Variable", ui-monospace, monospace;
+}
+
+/* ---------- Base ---------- */
+
+/* In the base layer so Tailwind utilities (e.g. focus:outline-none, scrollbar hiding) can override it. */
+@layer base {
+  html {
+    scroll-padding-top: calc(var(--header-h) + 16px);
+    /* Keeps focused fields clear of the bottom dock. */
+    scroll-padding-bottom: calc(var(--dock-h) + 16px);
+  }
+
+  body {
+    background-color: var(--bg);
+    background-image:
+      radial-gradient(1200px 500px at 70% -10%, var(--glow), transparent 70%),
+      var(--grain);
+    background-blend-mode: normal, overlay;
+    color: var(--ink);
+    font-family: var(--font-sans);
+    font-size: 16px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 2px;
+  }
+
+  ::selection {
+    background: color-mix(in srgb, var(--copper) 40%, transparent);
+  }
+
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--line) transparent;
+  }
+}
+
+/* ---------- Pixel vocabulary ---------- */
+
+@layer components {
+  /* Stepped corners where the browser supports corner-shape, soft corners elsewhere. */
+  .pixel {
+    border-radius: 6px;
+  }
+  @supports (corner-shape: notch) {
+    .pixel {
+      border-radius: 4px;
+      corner-shape: notch;
+    }
+  }
+
+  /* A card: the main surface level, with a visible edge. */
+  .card {
+    background: var(--surface);
+    border: var(--card-bw, 2px) solid var(--line);
+  }
+
+  /* Secondary button: its own fill, a 3:1 outline and a keycap shade at the bottom. */
+  .btn-secondary {
+    background: var(--btn);
+    color: var(--ink);
+    box-shadow:
+      inset 0 0 0 var(--btn-bw, 2px) var(--btn-border),
+      inset 0 -4px 0 var(--btn-shade);
+  }
+  .btn-secondary:hover:not(:disabled) {
+    background: var(--hover);
+  }
+  .btn-secondary:active:not(:disabled) {
+    transform: translateY(1px);
+    box-shadow:
+      inset 0 0 0 var(--btn-bw, 2px) var(--btn-border),
+      inset 0 -2px 0 var(--btn-shade);
+  }
+
+  /* Raised: light top-left, dark bottom-right. */
+  .bevel {
+    box-shadow:
+      inset 2px 2px 0 var(--bevel-light),
+      inset -2px -2px 0 var(--bevel-dark);
+  }
+
+  /* Sunken slot, like an inventory cell. */
+  .slot {
+    background: var(--slot);
+    box-shadow:
+      inset 2px 2px 0 var(--bevel-dark),
+      inset -2px -2px 0 var(--bevel-light);
+  }
+
+  .btn-primary {
+    background: var(--copper);
+    color: var(--on-copper);
+    box-shadow:
+      inset 0 2px 0 rgb(255 255 255 / 0.32),
+      inset 0 -3px 0 rgb(0 0 0 / 0.28);
+  }
+  .btn-primary:hover:not(:disabled) {
+    filter: brightness(1.08);
+  }
+  .btn-primary:active:not(:disabled) {
+    transform: translateY(1px);
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.2),
+      inset 0 -1px 0 rgb(0 0 0 / 0.28);
+  }
+
+  /*
+   * The chosen option in a set (segments, versions, tabs): the same recipe as an added mod row.
+   * Solid copper stays reserved for actions, so the next step is never one of five orange bars.
+   */
+  .btn-selected {
+    background: var(--copper-soft);
+    color: var(--ink);
+    box-shadow:
+      inset 0 0 0 2px var(--copper-line),
+      inset 0 -3px 0 var(--btn-shade);
+  }
+
+  .display-heading {
+    font-family: var(--font-display);
+    letter-spacing: -0.01em;
+  }
+}
+
+/* ---------- Motion ---------- */
+
+@keyframes slot-pop {
+  from {
+    transform: scale(0.85);
+    opacity: 0;
+  }
+}
+@keyframes line-changed {
+  from {
+    background-color: color-mix(in srgb, var(--copper) 22%, transparent);
+    box-shadow: inset 3px 0 0 var(--copper);
+  }
+  to {
+    background-color: transparent;
+    box-shadow: inset 3px 0 0 transparent;
+  }
+}
+@keyframes crafted-drop {
+  0% {
+    transform: translateY(-28px) scale(0.6);
+    opacity: 0;
+  }
+  60% {
+    transform: translateY(3px) scale(1.06);
+    opacity: 1;
+  }
+  100% {
+    transform: none;
+  }
+}
+@keyframes shimmer {
+  to {
+    background-position: -200% 0;
+  }
+}
+
+.anim-pop {
+  animation: slot-pop 140ms ease-out;
+}
+.anim-line {
+  animation: line-changed 1.4s ease-out;
+}
+.anim-crafted {
+  animation: crafted-drop 520ms cubic-bezier(0.2, 0.9, 0.3, 1.2);
+}
+.skeleton {
+  background: linear-gradient(90deg, var(--raised) 0%, var(--line) 50%, var(--raised) 100%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+:root[data-motion="reduce"] *,
+:root[data-motion="reduce"] ::before,
+:root[data-motion="reduce"] ::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  scroll-behavior: auto !important;
+}

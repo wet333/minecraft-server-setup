@@ -1,2 +1,29 @@
+# Dependencies and build output
+node_modules/
+dist/
+coverage/
+*.tsbuildinfo
+
+# Environment variables (keep only an example file, if any)
+.env
+.env.*
+!.env.example
+*.local
+
+# Deploy tooling
+.vercel/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Editors and OS
 /.idea/
-data
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Claude Code
+.claude/
+CLAUDE.md
+CLAUDE.local.md
