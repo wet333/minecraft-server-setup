@@ -140,6 +140,27 @@
     scrollbar-width: thin;
     scrollbar-color: var(--line) transparent;
   }
+
+  /* Tailwind v4 Preflight leaves buttons on the default arrow; give every clickable control the hand. */
+  button,
+  a[href],
+  summary,
+  select,
+  input:is([type="checkbox"], [type="radio"], [type="file"], [type="range"], [type="color"], [type="button"], [type="submit"], [type="reset"]),
+  ::file-selector-button,
+  [role="button"],
+  [role="tab"],
+  [role="radio"],
+  [role="checkbox"],
+  [role="switch"],
+  [role="option"],
+  [role="menuitem"] {
+    cursor: pointer;
+  }
+
+  :is(button, select, input, [role="button"], [role="tab"], [role="radio"], [role="checkbox"], [role="switch"], [role="option"], [role="menuitem"]):is(:disabled, [aria-disabled="true"]) {
+    cursor: not-allowed;
+  }
 }
 
 /* ---------- Pixel vocabulary ---------- */
